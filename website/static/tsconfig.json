@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "es2022",
+    "moduleResolution": "bundler",
+    "lib": ["DOM", "es2022"],
+    "strict": true
+  },
+  "include": ["main.ts", "./pkg/aes_ctr_rsts.js"]
+}

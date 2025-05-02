@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Notes{% endblock %}
+
+{% block content %}
+<div class="notes-wrapper">
+  <div class="notes-list">
+    {% for note in user.notes %}
+      <div class="note">
+        {{ note.text }} 
+        <button class="delete-btn" onclick="deleteNote({{ note.id }})">&times;</button>
+      </div>
+    {% else %}
+      <div class="note">No notes...</div>
+    {% endfor %}
+  </div>
+
+  <form method="POST">
+    <textarea name="note" id="note" placeholder="Write note..." required></textarea>
+    <button class="sub-btn" type="submit">Submit</button>
+  </form>
+</div>
+{% endblock %}

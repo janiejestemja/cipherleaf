@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Cipherleaf{% endblock %}
+
+{% block content %}
+<div class="modal" id="quickStartModal">
+  <div class="modal-content" id="modalContent">
+      <p>Leave the Passphrase-Textarea empty to follow this tutorial.</p>
+      <br>
+      <p>Copy paste the <a href="/info">LoremCipher</a> into the Cipherleaf-Textarea and click on the Cipherleaf button, to encrypt it locally (inside the browser).</p>
+      <br>
+      <p>Click on the Message to store the Ciphertext in the cloud.</p>
+      <br>
+      <p>Click twice on the Ciphertext to restore LoremIpsum from LoremCipher, and click a third time to obscure the contents of the crypt.</p>
+      <br>
+      <p>To delete a Ciphertext from click on the 'X' in the upper right of it.</p>
+      <br>
+      <p>Reloading the page resets decrypted Ciphertexts back into their ciphered state.</p>
+    <button class="close-modal-btn" id="closeModalBtn">Back to homepage</button>
+  </div>
+</div>
+<button class="modal-btn" id="quickStartBtn">Quickstart</button>
+<input class="phrase" type="password" id="passphrase" placeholder="Passphrase..."></input>
+<div class="notes-wrapper">
+  <div class="notes-list">
+    {% for ciphernote in user.cipher_notes %}
+    <div class="note">
+        <div class="deletable">{{ ciphernote.ciphertext }}</div> 
+        <button class="delete-btn" onclick="deleteCipherHex({{ ciphernote.id }})">&times;</button>
+      </div>
+    {% else %}
+      <div class="note">No cipherleafs...</div>
+    {% endfor %}
+  </div>
+  <div class="notes-list" id="cipher-div"></div>
+  <textarea name="cipher-note" id="cipher-note" placeholder="Cipherleafs..."></textarea>
+  <button class="sub-btn" id="cipher-btn">Cipherleaf</button>
+</div>
+
+<script type="module" src="{{ url_for('static', filename='main.js') }}"></script>
+{% endblock %}

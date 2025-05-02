@@ -1,0 +1,313 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* General */
+body {
+    background-color: #200220;
+    font-family: sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+h1, h2, h3 {
+    color: #9b59b6;
+}
+
+p {
+    color: white;
+}
+
+.container {
+    flex: 1;
+}
+
+/* Navbar */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 1rem;
+    background-color: black;
+    color: #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar a {
+    margin-left: 1rem;
+    transition: color 0.3s ease;
+    color: #9b59b6;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+.navbar a:hover {
+    color: #00ea5a;
+    text-decoration: underline;
+    transition: color 0.3 ease;
+}
+/* Form */
+.form-wrapper {
+    background: #fff;
+    padding: 2rem;
+    max-width: 400px;
+    margin: 2rem auto;
+    border-radius: 8px;
+    box-shadow: 0 4 px 6 px rgba(0, 0, 0, 0.1);
+}
+
+.form-wrapper h2 {
+    margin-bottom: 1.5rem;
+    color: black;
+    text-align: center;
+}
+
+.form-wrapper input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-wrapper button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #9b59b6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-wrapper button:hover {
+    color: black;
+    background-color: #00ea5a;
+}
+
+/* Alerts */
+.alert {
+    position: relative;
+    padding: 1rem 2rem 1rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    font-weight: bold;
+    color: white;
+    background-color: grey;
+}
+
+.alert.success {
+    background-color: #2ecc71;
+}
+
+.alert.error{
+    background-color: #e74c4c;
+}
+
+.alert.info {
+    background-color: #3498db;
+}
+
+.alert .close-btn {
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: black;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+/* Notes */
+.notes-wrapper {
+    margin: 0.5rem auto;
+}
+
+.sub-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #9b59b6;
+    color: #00ffff;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 1s ease;
+}
+
+.sub-btn:hover {
+    color: black;
+    background-color: #00ea5a;
+    text-decoration: underline;
+    transition: background-color 1s ease;
+}
+
+textarea {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom:1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+textarea:hover {
+    border-right: 5px solid #9b59b6;
+}
+
+.notes-list {
+    margin-top:1rem;
+}
+
+.note {
+    position: relative;
+    background-color: black;
+    color: white;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-left: 5px solid #9b59b6;
+    border-radius: 5px;
+}
+
+.leaf-note {
+    position: relative;
+    background-color: black;
+    color: white;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-left: 5px solid #9b59b6;
+    border-radius: 5px;
+    transition: color 0.3s ease;
+}
+
+.leaf-note:hover {
+    color: #9b59b6;
+    cursor: pointer;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 0px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+.delete-btn:hover {
+    color: red;
+}
+
+.deletable {
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.deletable:hover {
+    color:grey;
+}
+
+.phrase {
+    display:flex;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    border: 2px solid #9b59b6;;
+    border-radius: 5px;
+}
+
+.phrase:hover {
+    border-right: 5px solid #9b59b6;
+}
+
+/* Modal */
+.modal-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #00ffff;
+    color: #9b59b6;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 1s ease;
+}
+
+.modal-btn:hover {
+    color: black;
+    background-color: #00ea5a;
+    text-decoration: underline;
+    transition: background-color 1s ease;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index:15;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5)
+}
+
+.modal-content {
+    background-color: rgba(0,0,0,0.8);
+    padding: 1rem;
+    border-radius: 6px;
+    width: 50%; height:100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.modal-content p {
+    font-family: serif;
+    color: white;
+    transition: color 6s ease;
+}
+
+.modal-content p:hover {
+    color: #00ea5a;
+    transition: color 6s ease;
+}
+
+.modal-content a {
+    color: #00ffff;
+    transition: color 1s ease;
+}
+
+.modal-content a:hover {
+    color: #9b59b6;
+    transition: color 1s ease;
+}
+
+.close-modal-btn {
+    position: fixed;
+    width: 50%;
+    bottom: 1rem; left: 0rem; 
+    padding: 0.5rem;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    color: #9b59b6;
+    background-color: #00ffff;
+    transition: background-color 1s ease;
+}
+
+.close-modal-btn:hover {
+    color: black;
+    background-color: #00ea5a;
+    transition: background-color 1s ease;
+    cursor: pointer;
+}
+
