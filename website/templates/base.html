@@ -14,6 +14,8 @@
       <a href="{{ url_for('views.home') }}">CipherLeafs...</a>
       {% if user.is_authenticated %}
       <a href="{{ url_for('views.notes') }}">...plainNotes...</a>
+      {% else %}
+      <a href="{{ url_for('views.demo') }}">...demo...</a>
       {% endif %}
       <a href="{{ url_for('views.lorem_cipher') }}">...LoremCipher</a>
     </div>

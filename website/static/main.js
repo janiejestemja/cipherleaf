@@ -1,6 +1,7 @@
 import init, { AesCtrSecret } from "./pkg/aes_ctr_rsts.js";
 const cipherNote = document.getElementById("cipher-note");
 const cipherBtn = document.getElementById("cipher-btn");
+const demoCipherBtn = document.getElementById("demo-cipher-btn");
 const cipherDiv = document.getElementById("cipher-div");
 const passDiv = document.getElementById("passphrase");
 const quickStartModal = document.getElementById("quickStartModal");
@@ -12,7 +13,7 @@ async function main() {
     document.querySelectorAll(".deletable").forEach(div => {
         div.addEventListener("click", async () => handleDecryption(div));
     });
-    cipherBtn.addEventListener("click", async () => {
+    cipherBtn?.addEventListener("click", async () => {
         const plaintext = cipherNote.value.trim();
         if (plaintext !== "") {
             const encoded = new TextEncoder().encode(plaintext);
@@ -28,6 +29,23 @@ async function main() {
                 const hexContent = div.textContent?.replace("Decode & Vanish", "").trim() || "";
                 div.remove();
                 saveCipherHex(hexContent);
+            });
+        }
+    });
+    demoCipherBtn?.addEventListener("click", async () => {
+        const plaintext = cipherNote.value.trim();
+        if (plaintext !== "") {
+            const encoded = new TextEncoder().encode(plaintext);
+            let { key, nonce } = await deriveKeyAndNonce(passDiv.value?.trim() || "abc");
+            const encrypted = new AesCtrSecret(key, nonce).encrypt(encoded);
+            const encryptedHex = bytesToHex(encrypted);
+            const div = document.createElement("div");
+            div.classList.add("leaf-note");
+            div.textContent = encryptedHex;
+            cipherDiv.appendChild(div);
+            cipherNote.value = "";
+            div.addEventListener("click", async () => {
+                handleDecryption(div);
             });
         }
     });
@@ -88,7 +106,7 @@ function saveCipherHex(cipherHex) {
 async function handleDecryption(element) {
     const hexString = element.textContent?.trim() || "Ooops, something went wrong...";
     const hexBytes = hexToBytes(hexString);
-    let passphrase = passDiv.value?.trim() || "abc";
+    let passphrase = "abc";
     let { key, nonce } = await deriveKeyAndNonce(passphrase);
     const decrypted = new AesCtrSecret(key, nonce).encrypt(hexBytes);
     const decoded = new TextDecoder().decode(decrypted);

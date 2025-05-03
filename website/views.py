@@ -12,6 +12,10 @@ views = Blueprint("views", __name__)
 def home():
     return render_template("home.html", user=current_user)
 
+@views.route("/demo", methods=["GET"])
+def demo():
+    return render_template("demo.html", user=current_user)
+
 @views.route("/lorem-cipher", methods=["GET"])
 def lorem_cipher():
     return render_template("lorem_cipher.html", user=current_user)
