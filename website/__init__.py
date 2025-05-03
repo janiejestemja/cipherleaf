@@ -1,4 +1,4 @@
-from os import path
+from os import path, getenv
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -10,6 +10,7 @@ DB_NAME = "database.db"
 def create_app():
     app = Flask(__name__)
     app.secret_key = "supersecretkey"
+    app.config["SECRET_KEY"] = getenv("FLASK_SECRET_KEY", "fallback_secret_key")
 
     from .views import views
     from .auth import auth
