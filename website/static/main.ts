@@ -96,6 +96,66 @@ async function deriveKeyAndNonce(passphrase: string): Promise<{ key: Uint8Array,
     return { key, nonce };
 }
 
+async function deriveKeyNonceSalt(passphrase: string, salt?: Uint8Array): Promise<{
+    key:Uint8Array,
+    nonce: Uint8Array,
+    salt: Uint8Array,
+}> {
+    const ikm = new TextEncoder().encode(passphrase);
+
+    // If no salt mine some (256 bits)
+    if (!salt) {
+        salt = crypto.getRandomValues(new Uint8Array(32));
+    }
+
+    const baseKey = await crypto.subtle.importKey(
+        "raw", ikm, {name: "HKDF" }, false, ["deriveBits"]
+    );
+
+    const derive = async (infoStr: string, length: number) => {
+        const info = new TextEncoder().encode(infoStr);
+        const bits = await crypto.subtle.deriveBits(
+            {
+                name: "HKDF",
+                hash: "SHA-256",
+                salt: salt,
+                info: info
+            },
+            baseKey,
+            length * 8
+        );
+            return new Uint8Array(bits);
+    };
+
+    const key = await derive("key", 32);
+    const nonce = await derive("nonce", 8);
+
+    return {key, nonce, salt};
+}
+
+function saveCipherHex(cipherHex: string) {
+    fetch("/save-cipher-hex", {
+        method: "POST",
+        body: JSON.stringify({ cipherHex: cipherHex}),
+          headers: { "Content-Type": "application/json" },
+    }).then((_res) => {
+        window.location.href="/";
+    });
+}
+
+async function handleDecryption(element: Element) {
+    const hexString = element.textContent?.trim() || "Ooops, something went wrong...";
+    const hexBytes = hexToBytes(hexString);
+
+    let passphrase = passDiv.value?.trim() || "abc";
+    let {key, nonce} = await deriveKeyAndNonce(passphrase);
+
+    const decrypted = new AesCtrSecret(key, nonce).encrypt(hexBytes);
+    const decoded = new TextDecoder().decode(decrypted);
+    element.textContent = decoded;
+}
+
+/* Conversions */
 function stringToHex(str: string): string {
     return Array.from(new TextEncoder().encode(str))
         .map(byte => byte.toString(16).padStart(2, "0"))
@@ -122,24 +182,3 @@ function hexToBytes(hex: string): Uint8Array {
     return bytes;
 }
 
-function saveCipherHex(cipherHex: string) {
-    fetch("/save-cipher-hex", {
-        method: "POST",
-        body: JSON.stringify({ cipherHex: cipherHex}),
-          headers: { "Content-Type": "application/json" },
-    }).then((_res) => {
-        window.location.href="/";
-    });
-}
-
-async function handleDecryption(element: Element) {
-    const hexString = element.textContent?.trim() || "Ooops, something went wrong...";
-    const hexBytes = hexToBytes(hexString);
-
-    let passphrase = "abc";
-    let {key, nonce} = await deriveKeyAndNonce(passphrase);
-
-    const decrypted = new AesCtrSecret(key, nonce).encrypt(hexBytes);
-    const decoded = new TextDecoder().decode(decrypted);
-    element.textContent = decoded;
-}
