@@ -53,6 +53,16 @@ p {
     text-decoration: underline;
     transition: color 0.3 ease;
 }
+
+.nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #9b59b6;
+    cursor: pointer;
+}
+
 /* Form */
 .form-wrapper {
     background: #fff;
@@ -301,6 +311,7 @@ textarea:hover {
     color: #9b59b6;
     background-color: #00ffff;
     transition: background-color 1s ease;
+    cursor: pointer;
 }
 
 .close-modal-btn:hover {
@@ -331,9 +342,9 @@ textarea:hover {
     }
 
     .modal-content {
+        font-size: 14px;
         width: 100%;
         height: auto;
-        max-height: 90vh;
         margin: 5vh auto;
         border-radius: 0;
     }
@@ -343,5 +354,38 @@ textarea:hover {
         left: 9;
         bottom: 0;
         border-radius: 0;
+    }
+
+    .nav-toggle {
+        display: block;
+        margin-left: 1rem;
+    }
+
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: black;
+        padding-top: 1rem;
+    }
+
+    .nav-links a {
+        padding: 0.5rem 1rem;
+        border-top: 1px solid #333;
+    }
+
+    .nav-links.nav-open {
+        display:flex;
+    }
+
+    .navbar {
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+
+    .nav-left {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
     }
 }

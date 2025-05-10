@@ -13,22 +13,25 @@
   <nav class="navbar">
     <div class="nav-left">
       <a href="{{ url_for('views.home') }}">CipherLeafs...</a>
+      <button class="nav-toggle" onclick="toggleNavbar()">«¢Ł»</button>
+    </div>
+    <div class="nav-links" id="navLinks">
+
       {% if user.is_authenticated %}
       <a href="{{ url_for('views.notes') }}">...plainNotes...</a>
-      {% else %}
+      {% endif %}
+
+      {% if not user.is_authenticated %}
+      <a href="{{ url_for('auth.login') }}">Login</a>
+      <a href="{{ url_for('auth.signup') }}">Signup</a>
       <a href="{{ url_for('views.demo') }}">...demo...</a>
       {% endif %}
+
       <a href="{{ url_for('views.lorem_cipher') }}">...LoremCipher</a>
-    </div>
-    <div class="nav-right">
+
       {% if user.is_authenticated %}
-        <a href="{{ url_for('auth.signout') }}">Signout</a>
-        <a href="{{ url_for('auth.logout') }}">Logout</a>
-
-      {% else %}
-        <a href="{{ url_for('auth.login') }}">Login</a>
-        <a href="{{ url_for('auth.signup') }}">Signup</a>
-
+      <a href="{{ url_for('auth.signout') }}">Signout</a>
+      <a href="{{ url_for('auth.logout') }}">Logout</a>
       {% endif %}
     </div>
   </nav>

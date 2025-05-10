@@ -1,3 +1,7 @@
+function toggleNavbar() {
+    var navLinks = document.getElementById("navLinks");
+    navLinks.classList.toggle("nav-open");
+}
 function deleteNote(noteId) {
     fetch("/delete-note", {
         method: "POST",
