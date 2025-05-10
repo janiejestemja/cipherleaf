@@ -310,3 +310,38 @@ textarea:hover {
     cursor: pointer;
 }
 
+@media (max-width:600px) {
+    html {
+        font-size: 18px;
+    }
+
+    body {
+        padding: 1rem;
+    }
+
+    input,
+    button,
+    textarea {
+        font-size: 1.1rem;
+    }
+
+    .form-wrapper {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    .modal-content {
+        width: 100%;
+        height: auto;
+        max-height: 90vh;
+        margin: 5vh auto;
+        border-radius: 0;
+    }
+
+    .close-modal-btn {
+        width: 100%;
+        left: 9;
+        bottom: 0;
+        border-radius: 0;
+    }
+}
