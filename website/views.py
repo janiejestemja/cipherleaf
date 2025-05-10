@@ -62,7 +62,6 @@ def save_cipher_hex():
     if request.method == "POST":
         note = json.loads(request.data)
         cipher_hex = note["cipherHex"]
-        print("CipherHex recieved: ", cipher_hex)
 
         if len(cipher_hex) < 1:
             flash("Note is too short.", category="error")
