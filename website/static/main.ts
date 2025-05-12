@@ -5,10 +5,7 @@ const cipherBtn = document.getElementById("cipher-btn") as HTMLButtonElement;
 const demoCipherBtn = document.getElementById("demo-cipher-btn") as HTMLButtonElement;
 const cipherDiv = document.getElementById("cipher-div") as HTMLDivElement;
 const passDiv = document.getElementById("passphrase") as HTMLInputElement;
-
-const quickStartModal = document.getElementById("quickStartModal") as HTMLDivElement;
-const quickStartBtn = document.getElementById("quickStartBtn") as HTMLButtonElement;
-const closeModalBtn = document.querySelector(".close-modal-btn") as HTMLButtonElement;
+const saltDiv = document.getElementById("salt") as HTMLInputElement;
 
 async function main() {
     /* Initialise rust wasm */
@@ -20,24 +17,39 @@ async function main() {
 
     cipherBtn?.addEventListener("click", async () => {
         const plaintext = cipherNote.value.trim();
+        const oldSaltHex = saltDiv.value.trim() || "";
+        const oldSalt = hexToBytes(oldSaltHex);
+        
         if (plaintext !== "") {
             const encoded = new TextEncoder().encode(plaintext);
-            let {key, nonce} = await deriveKeyAndNonce(passDiv.value?.trim() || "abc");
+
+            let {key, nonce, salt} = await deriveKeyNonceSalt(passDiv.value?.trim() || "abc", oldSalt);
+
             const encrypted = new AesCtrSecret(key, nonce).encrypt(encoded);
             const encryptedHex = bytesToHex(encrypted);
+            const saltHex = bytesToHex(salt);
+
+            const noteDiv = document.createElement("div");
+            noteDiv.textContent = encryptedHex;
+
+            const saltDiv = document.createElement("div");
+            saltDiv.textContent = saltHex;
 
             const div = document.createElement("div");
             div.classList.add("leaf-note");
-            div.textContent = encryptedHex;
+            div.appendChild(noteDiv);
+            div.appendChild(saltDiv);
 
             cipherDiv.appendChild(div);
 
             cipherNote.value = "";
 
             div.addEventListener("click", async () => {
-                const hexContent = div.textContent?.replace("Decode & Vanish", "").trim() || "";
+                const hexContent = noteDiv.textContent?.trim() || "";
+                const saltContent = saltDiv.textContent?.trim() || "";
+                
                 div.remove();
-                saveCipherHex(hexContent);
+                saveCipherHex(hexContent, saltContent);
             });
         }
     });
@@ -60,22 +72,8 @@ async function main() {
             cipherNote.value = "";
 
             div.addEventListener("click", async () => {
-                handleDecryption(div);
+                handleDemoDecryption(div);
             });
-        }
-    });
-
-    quickStartBtn.addEventListener("click", () => {
-        quickStartModal.style.display = "block";
-    });
-
-    closeModalBtn.addEventListener("click", () => {
-        quickStartModal.style.display = "none";
-    });
-
-    window.addEventListener("click", (event: MouseEvent) => {
-        if (event.target === quickStartModal) {
-          quickStartModal.style.display = "none";
         }
     });
 }
@@ -83,19 +81,6 @@ async function main() {
 main();
 
 /* Utility functions */
-async function deriveKeyAndNonce(passphrase: string): Promise<{ key: Uint8Array, nonce: Uint8Array }> {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(passphrase);
-
-    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-    const hashArray = new Uint8Array(hashBuffer);
-
-    const key = hashArray.slice(0, 32);
-    const nonce = hashArray.slice(0, 8).reverse();
-
-    return { key, nonce };
-}
-
 async function deriveKeyNonceSalt(passphrase: string, salt?: Uint8Array): Promise<{
     key:Uint8Array,
     nonce: Uint8Array,
@@ -133,17 +118,48 @@ async function deriveKeyNonceSalt(passphrase: string, salt?: Uint8Array): Promis
     return {key, nonce, salt};
 }
 
-function saveCipherHex(cipherHex: string) {
+function saveCipherHex(cipherHex: string, saltHex: string) {
     fetch("/save-cipher-hex", {
         method: "POST",
-        body: JSON.stringify({ cipherHex: cipherHex}),
+        body: JSON.stringify({ cipherHex: cipherHex, saltHex: saltHex}),
           headers: { "Content-Type": "application/json" },
     }).then((_res) => {
         window.location.href="/";
     });
 }
 
+async function deriveKeyAndNonce(passphrase: string): Promise<{ key: Uint8Array, nonce: Uint8Array }> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(passphrase);
+
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = new Uint8Array(hashBuffer);
+
+    const key = hashArray.slice(0, 32);
+    const nonce = hashArray.slice(0, 8).reverse();
+
+    return { key, nonce };
+}
+
+
 async function handleDecryption(element: Element) {
+
+    const hexString = element.children[0]?.textContent?.trim() || "Couldn't find leaf";
+    const hexBytes = hexToBytes(hexString);
+
+    const saltHex = element.children[1]?.textContent?.trim() || "pepper";
+    if (saltHex === "pepper") return;
+    const saltBytes = hexToBytes(saltHex);
+
+    let passphrase = passDiv.value?.trim() || "abc";
+    let {key, nonce} = await deriveKeyNonceSalt(passphrase, saltBytes);
+
+    const decrypted = new AesCtrSecret(key, nonce).encrypt(hexBytes);
+    const decoded = new TextDecoder().decode(decrypted);
+    element.textContent = decoded;
+}
+
+async function handleDemoDecryption(element: Element) {
     const hexString = element.textContent?.trim() || "Ooops, something went wrong...";
     const hexBytes = hexToBytes(hexString);
 

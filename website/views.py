@@ -62,11 +62,18 @@ def save_cipher_hex():
     if request.method == "POST":
         note = json.loads(request.data)
         cipher_hex = note["cipherHex"]
+        salt_hex = note["saltHex"]
+
+        print(salt_hex)
 
         if len(cipher_hex) < 1:
             flash("Note is too short.", category="error")
         else:
-            new_cipher_hex = CipherNote(ciphertext=cipher_hex, user_id=current_user.id)
+            new_cipher_hex = CipherNote(
+                    ciphertext=cipher_hex, 
+                    salt = salt_hex,
+                    user_id=current_user.id
+                    )
             db.session.add(new_cipher_hex)
             db.session.commit()
 

@@ -24,6 +24,7 @@ class Note(db.Model):
 class CipherNote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ciphertext = db.Column(db.String(10_000), nullable=False)
+    salt = db.Column(db.String(1000), nullable=False)
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     # One to many relationship between user to notes
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
