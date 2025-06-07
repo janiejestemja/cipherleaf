@@ -5,7 +5,6 @@ const cipherBtn = document.getElementById("cipher-btn") as HTMLButtonElement;
 const demoCipherBtn = document.getElementById("demo-cipher-btn") as HTMLButtonElement;
 const cipherDiv = document.getElementById("cipher-div") as HTMLDivElement;
 const passDiv = document.getElementById("passphrase") as HTMLInputElement;
-const saltDiv = document.getElementById("salt") as HTMLInputElement;
 
 async function main() {
     /* Initialise rust wasm */
@@ -17,13 +16,11 @@ async function main() {
 
     cipherBtn?.addEventListener("click", async () => {
         const plaintext = cipherNote.value.trim();
-        const oldSaltHex = saltDiv.value.trim() || "";
-        const oldSalt = hexToBytes(oldSaltHex);
         
         if (plaintext !== "") {
             const encoded = new TextEncoder().encode(plaintext);
 
-            let {key, nonce, salt} = await deriveKeyNonceSalt(passDiv.value?.trim() || "abc", oldSalt);
+            let {key, nonce, salt} = await deriveKeyNonceSalt(passDiv.value?.trim() || "abc");
 
             const encrypted = new AesCtrSecret(key, nonce).encrypt(encoded);
             const encryptedHex = bytesToHex(encrypted);
@@ -48,8 +45,8 @@ async function main() {
                 const hexContent = noteDiv.textContent?.trim() || "";
                 const saltContent = saltDiv.textContent?.trim() || "";
                 
-                div.remove();
                 saveCipherHex(hexContent, saltContent);
+                div.remove();
             });
         }
     });
@@ -88,9 +85,11 @@ async function deriveKeyNonceSalt(passphrase: string, salt?: Uint8Array): Promis
 }> {
     const ikm = new TextEncoder().encode(passphrase);
 
-    // If no salt mine some (256 bits)
-    if (!salt) {
+    if (salt) {
+        console.log("old salt");
+    } else {
         salt = crypto.getRandomValues(new Uint8Array(32));
+        console.log("new salt");
     }
 
     const baseKey = await crypto.subtle.importKey(

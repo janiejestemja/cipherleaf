@@ -4,7 +4,6 @@ const cipherBtn = document.getElementById("cipher-btn");
 const demoCipherBtn = document.getElementById("demo-cipher-btn");
 const cipherDiv = document.getElementById("cipher-div");
 const passDiv = document.getElementById("passphrase");
-const saltDiv = document.getElementById("salt");
 async function main() {
     /* Initialise rust wasm */
     await init();
@@ -13,11 +12,9 @@ async function main() {
     });
     cipherBtn?.addEventListener("click", async () => {
         const plaintext = cipherNote.value.trim();
-        const oldSaltHex = saltDiv.value.trim() || "";
-        const oldSalt = hexToBytes(oldSaltHex);
         if (plaintext !== "") {
             const encoded = new TextEncoder().encode(plaintext);
-            let { key, nonce, salt } = await deriveKeyNonceSalt(passDiv.value?.trim() || "abc", oldSalt);
+            let { key, nonce, salt } = await deriveKeyNonceSalt(passDiv.value?.trim() || "abc");
             const encrypted = new AesCtrSecret(key, nonce).encrypt(encoded);
             const encryptedHex = bytesToHex(encrypted);
             const saltHex = bytesToHex(salt);
@@ -34,8 +31,8 @@ async function main() {
             div.addEventListener("click", async () => {
                 const hexContent = noteDiv.textContent?.trim() || "";
                 const saltContent = saltDiv.textContent?.trim() || "";
-                div.remove();
                 saveCipherHex(hexContent, saltContent);
+                div.remove();
             });
         }
     });
@@ -61,9 +58,12 @@ main();
 /* Utility functions */
 async function deriveKeyNonceSalt(passphrase, salt) {
     const ikm = new TextEncoder().encode(passphrase);
-    // If no salt mine some (256 bits)
-    if (!salt) {
+    if (salt) {
+        console.log("old salt");
+    }
+    else {
         salt = crypto.getRandomValues(new Uint8Array(32));
+        console.log("new salt");
     }
     const baseKey = await crypto.subtle.importKey("raw", ikm, { name: "HKDF" }, false, ["deriveBits"]);
     const derive = async (infoStr, length) => {
