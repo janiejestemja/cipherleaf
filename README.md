@@ -1,6 +1,6 @@
 # CipherLeaf
 ---
-Minimialistic webapp - client side crypto - zero knowledge backend. 
+Minimialistic webapp - client side crypto. 
 
 ## User Authentification & Session Management
 ---
@@ -22,7 +22,7 @@ Minimialistic webapp - client side crypto - zero knowledge backend.
 
 ### Data Handling
 --- 
-- Encrypted Data Storage: User notes are encrypted client-side using WebAssembly and stored on the server in their encrypted form, ensuring zero-knowledge storage.
+- Encrypted Data Storage: User notes are encrypted client-side using WebAssembly and stored on the server in their encrypted form.
 - Data Retrieval: Upon authentication, users can retrieve their encrypted notes, which are then decrypted client-side for viewing or deleting.
 
 ## Encryption Logic Overview
