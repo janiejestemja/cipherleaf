@@ -12,6 +12,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    font-size: 18px;
 }
 
 h1, h2, h3 {
@@ -22,12 +23,29 @@ p {
     color: white;
 }
 
+
+input,
+textarea {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom:1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 1.1rem;
+}
+
+textarea:hover {
+    border-right: 5px solid #9b59b6;
+}
+
 .container {
     flex: 1;
 }
 
 /* Navbar */
-.navbar {
+.nav {
     position: sticky;
     top: 0;
     z-index: 100;
@@ -37,9 +55,11 @@ p {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    align-items: flex-start;
 }
 
-.navbar a {
+.nav a {
     margin-left: 1rem;
     transition: color 1s ease;
     color: #9b59b6;
@@ -48,7 +68,7 @@ p {
     font-size: 1.2rem;
 }
 
-.navbar a:hover {
+.nav a:hover {
     color: #00ea5a;
     text-decoration: underline;
     transition: color 0.3 ease;
@@ -61,13 +81,14 @@ p {
     font-size: 1.5rem;
     color: #9b59b6;
     cursor: pointer;
+    margin-left: 1rem;
 }
 
 /* Form */
 .form-wrapper {
     background: #fff;
-    padding: 2rem;
-    margin: 2rem auto;
+    padding: 1.5rem;
+    margin: 1rem;
     border-radius: 8px;
     box-shadow: 0 4 px 6 px rgba(0, 0, 0, 0.1);
 }
@@ -142,39 +163,6 @@ p {
     margin: 0.5rem auto;
 }
 
-.sub-btn {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #9b59b6;
-    color: #00ffff;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 1s ease;
-}
-
-.sub-btn:hover {
-    color: black;
-    background-color: #00ea5a;
-    text-decoration: underline;
-    transition: background-color 1s ease;
-}
-
-textarea {
-    width: 100%;
-    padding: 1rem;
-    margin-bottom:1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    resize: vertical;
-    font-family: inherit;
-}
-
-textarea:hover {
-    border-right: 5px solid #9b59b6;
-}
-
 .notes-list {
     margin-top:1rem;
 }
@@ -203,6 +191,25 @@ textarea:hover {
 .leaf-note:hover {
     color: #9b59b6;
     cursor: pointer;
+}
+
+.sub-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #9b59b6;
+    color: #00ffff;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 1s ease;
+}
+
+.sub-btn:hover {
+    color: black;
+    background-color: #00ea5a;
+    text-decoration: underline;
+    transition: background-color 1s ease;
 }
 
 .delete-btn {
@@ -242,29 +249,17 @@ textarea:hover {
     border-right: 5px solid #9b59b6;
 }
 
+/* Adjusting navbar for mobile... */
 @media (max-width:800px) {
-    html {
-        font-size: 18px;
-    }
-
-    body {
-        padding: 1rem;
-    }
-
-    input,
-    button,
-    textarea {
-        font-size: 1.1rem;
-    }
-
-    .form-wrapper {
-        padding: 1.5rem;
-        margin: 1rem;
-    }
-
+    /* navbar toggle button */
     .nav-toggle {
         display: block;
-        margin-left: 1rem;
+    }
+
+    .nav-left {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
     }
 
     .nav-links {
@@ -282,16 +277,5 @@ textarea:hover {
 
     .nav-links.nav-open {
         display:flex;
-    }
-
-    .navbar {
-        flex-wrap: wrap;
-        align-items: flex-start;
-    }
-
-    .nav-left {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
     }
 }
