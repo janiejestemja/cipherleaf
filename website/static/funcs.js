@@ -20,3 +20,16 @@ function deleteCipherHex(noteId) {
         window.location.href = "/";
     });
 }
+function deleteTextfile(filename) {
+    if (confirm("Are you sure you want to delete this file?")) {
+        fetch("/delete_textfile", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ filename: filename }),
+        }).then(function (_res) {
+            window.location.href = "/textfiles";
+        });
+    }
+}

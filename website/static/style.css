@@ -19,12 +19,22 @@ h1, h2, h3 {
     color: #9b59b6;
 }
 
-p {
+a, p, 
+input,
+label {
     color: white;
+}
+table {
+    width: 100%;
+}
+tr, td {
+    color: white;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 2px;
 }
 
 
-input,
 textarea {
     width: 100%;
     padding: 1rem;

@@ -1,11 +1,14 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, current_app, render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
+import os
+import shutil
 
 from . import db
 from .models import User
 
 auth = Blueprint("auth", __name__)
+
 
 @auth.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -30,11 +33,29 @@ def signup():
 
         # Create new user
         else:
-            new_user = User(email=email, user_name=user_name, password=generate_password_hash(passwordA))
-            
+            new_user = User(
+                email=email,
+                user_name=user_name,
+                password=generate_password_hash(passwordA)
+            )
+
             # Add User to Database
             db.session.add(new_user)
             db.session.commit()
+
+            # Create the user-specific directories
+            user_dir = os.path.join(
+                current_app.root_path,
+                "filesystem",
+                str(new_user.id)
+            )
+            img_dir = os.path.join(user_dir, "img")
+            text_dir = os.path.join(user_dir, "text")
+
+            # Create the directories if they don't exist
+            os.makedirs(user_dir, exist_ok=True)
+            os.makedirs(img_dir, exist_ok=True)
+            os.makedirs(text_dir, exist_ok=True)
 
             # Create a session right after signing up
             login_user(new_user, remember=True)
@@ -43,6 +64,7 @@ def signup():
             return redirect(url_for("views.home"))
 
     return render_template("signup.html", user=current_user)
+
 
 @auth.route("/signout", methods=["GET", "POST"])
 @login_required
@@ -65,6 +87,14 @@ def signout():
         elif not check_password_hash(current_user.password, passwordA):
             flash("Incorrect Password.", category="error")
         else:
+            user_dir = os.path.join(
+                current_app.root_path,
+                "filesystem",
+                str(current_user.id)
+            )
+            if os.path.exists(user_dir):
+                shutil.rmtree(user_dir)
+
             db.session.delete(current_user)
             db.session.commit()
 
@@ -75,12 +105,13 @@ def signout():
 
     return render_template("signout.html", user=current_user)
 
+
 @auth.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         email = request.form.get("email")
         passwordA = request.form.get("passwordA")
-        
+
         # Query Database
         user = User.query.filter_by(email=email).first()
         if user:
@@ -99,11 +130,11 @@ def login():
 
     return render_template("login.html", user=current_user)
 
+
 @auth.route("/logout")
-@login_required 
+@login_required
 def logout():
     # Ending users session
     logout_user()
     flash("Logout successful.", category="success")
     return redirect(url_for("auth.login"))
-

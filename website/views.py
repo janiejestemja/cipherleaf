@@ -15,9 +15,9 @@ def home():
 def demo():
     return render_template("demo.html", user=current_user)
 
-@views.route("/lorem-cipher", methods=["GET"])
-def lorem_cipher():
-    return render_template("lorem_cipher.html", user=current_user)
+@views.route("/cipher_leafs", methods=["GET"])
+def cipher_leafs():
+    return render_template("cipher_leafs.html", user=current_user)
 
 @views.route("/notes", methods=["GET", "POST"])
 @login_required

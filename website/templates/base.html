@@ -18,8 +18,9 @@
     <div class="nav-links" id="navLinks">
 
       {% if user.is_authenticated %}
-      <a href="{{ url_for('views.notes') }}">...cipherNotes...</a>
+      <a href="{{ url_for('views.cipher_leafs') }}">...cipherNotes...</a>
       <a href="{{ url_for('views.notes') }}">...plainNotes...</a>
+      <a href="{{ url_for('textfiles.texts') }}">...textfiles...</a>
       {% endif %}
 
       {% if not user.is_authenticated %}
