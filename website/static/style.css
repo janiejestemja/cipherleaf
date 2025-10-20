@@ -19,7 +19,13 @@ h1, h2, h3 {
     color: #9b59b6;
 }
 
-a, p, 
+p {
+    color: white;
+    max-width: 60%;
+    margin: auto;
+    padding: 0.5rem;
+}
+a,
 input,
 label {
     color: white;
@@ -34,6 +40,15 @@ tr, td {
     border-radius: 2px;
 }
 
+img {
+    max-width: 60%;
+    max-height: 100%;
+    display: block;
+    margin: auto;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+}
 
 textarea {
     width: 100%;
@@ -261,6 +276,17 @@ textarea:hover {
 
 /* Adjusting navbar for mobile... */
 @media (max-width:800px) {
+    p {
+        color: white;
+        max-width: 100%;
+        margin: auto;
+        padding: 0.5rem;
+    }
+
+    img {
+        max-width: 100%;
+    }
+
     /* navbar toggle button */
     .nav-toggle {
         display: block;
