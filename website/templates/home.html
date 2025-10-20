@@ -2,29 +2,5 @@
 {% block title %}Cipherleaf{% endblock %}
 
 {% block content %}
-<input class="phrase" type="password" id="passphrase" placeholder="Passphrase..."></input>
-<div class="notes-wrapper">
-  <div class="notes-list">
-    {% for ciphernote in user.cipher_notes %}
-    <div class="note">
-        <div class="deletable">
-          <div id="leaf" class="leaf">
-          {{ ciphernote.ciphertext }}
-          </div>
-          <div id="salt" class="salt">
-          {{ ciphernote.salt }}
-          </div>
-        </div> 
-        <button class="delete-btn" onclick="deleteCipherHex({{ ciphernote.id }})">&times;</button>
-      </div>
-    {% else %}
-      <div class="note">No cipherleafs...</div>
-    {% endfor %}
-  </div>
-  <div class="notes-list" id="cipher-div"></div>
-  <textarea name="cipher-note" id="cipher-note" placeholder="Cipherleafs..."></textarea>
-  <button class="sub-btn" id="cipher-btn">Cipherleaf</button>
-</div>
-
-<script type="module" src="{{ url_for('static', filename='main.js') }}"></script>
+<p>Placeholder paragraph...</p>
 {% endblock %}
