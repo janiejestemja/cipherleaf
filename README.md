@@ -91,7 +91,7 @@ How it works:
 ### Prerequisites
 ---
 - Python 3.13
-- [Encryption engine](https:github.com/janiejestemja/aes_ctr_rsts)
+- [Encryption engine](https://github.com/janiejestemja/aes_ctr_rsts)
 
 ### Installing dependencies
 ---
