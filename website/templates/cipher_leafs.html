@@ -2,8 +2,8 @@
 {% block title %}Cipherleaf{% endblock %}
 
 {% block content %}
-<input class="phrase" type="password" id="passphrase" placeholder="Passphrase..."></input>
 <div class="notes-wrapper">
+  <input class="phrase" type="password" id="passphrase" placeholder="Passphrase..."></input>
   <div class="notes-list">
     {% for ciphernote in user.cipher_notes %}
     <div class="note">

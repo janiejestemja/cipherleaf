@@ -48,7 +48,7 @@ img {
 textarea {
     width: 100%;
     padding: 1rem;
-    margin-bottom:1rem;
+    margin-bottom: 1rem;
     border: 1px solid #ccc;
     border-radius: 5px;
     resize: vertical;
@@ -106,9 +106,10 @@ textarea:hover {
 
 /* Form */
 .form-wrapper {
+    width: 60%;
     background: #fff;
     padding: 1.5rem;
-    margin: 1rem;
+    margin: auto;
     border-radius: 8px;
     box-shadow: 0 4 px 6 px rgba(0, 0, 0, 0.1);
 }
@@ -180,6 +181,7 @@ textarea:hover {
 
 /* Notes */
 .notes-wrapper {
+    width: 60%;
     margin: 0.5rem auto;
 }
 
@@ -308,5 +310,12 @@ textarea:hover {
 
     .nav-links.nav-open {
         display:flex;
+    }
+
+    .form-wrapper {
+        width: 100%
+    }
+    .notes-wrapper {
+        width: 100%;
     }
 }
